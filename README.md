@@ -1,4 +1,5 @@
-# MovieApp
+# GridView in Android
 
+This app demonstrates how to create and use a GridView for the PopularMovies App.
 
-This project has the code for an android app for viewing most popular/rated movies.
+A webcast was recorded that goes through this example code for the Android Developer Nanodegree.
