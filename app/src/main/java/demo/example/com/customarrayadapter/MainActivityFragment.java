@@ -43,9 +43,12 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        mCurrentPosition = gridView.getFirstVisiblePosition();
-        savedInstanceState.putInt(STATE_POSITION, mCurrentPosition);
-        savedInstanceState.putParcelableArrayList(MOVIE_LIST, results);
+        if(gridView != null) {
+            mCurrentPosition = gridView.getFirstVisiblePosition();
+            savedInstanceState.putInt(STATE_POSITION, mCurrentPosition);
+            savedInstanceState.putParcelableArrayList(MOVIE_LIST, results);
+        }
+
     }
 
     public ArrayList<Movie> createMovieList(JSONArray jsonArray) {
@@ -98,7 +101,7 @@ public class MainActivityFragment extends Fragment {
                     gridView = ((GridView) rootView);
                     gridView.setAdapter(movieAdapter);
                     movieAdapter.notifyDataSetChanged();
-
+                    gridView.smoothScrollToPosition(mCurrentPosition);
                     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -125,9 +128,17 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        getMovieList();
     }
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        if(savedInstanceState != null) {
+            mCurrentPosition = savedInstanceState.getInt(STATE_POSITION);
+            results = savedInstanceState.<Movie>getParcelableArrayList(MOVIE_LIST);
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
